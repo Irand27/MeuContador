@@ -14,6 +14,24 @@ class TelaInicial extends StatefulWidget {
 class _TelaInicialState extends State<TelaInicial> {
   var resultado = 0;
 
+  void _operation(Function(int, int) func) {
+    setState(() {
+      resultado = func(resultado, 1);
+    });
+  }
+
+  int add(num1, num2) {
+    return num1 + num2;
+  }
+
+  int sub(num1, num2) {
+    return num1 - num2;
+  }
+
+  int mul(num1, num2) {
+    return num1 * num2 * 2;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,24 +58,33 @@ class _TelaInicialState extends State<TelaInicial> {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          FloatingActionButton(
-            onPressed: () {
-              setState(() {
-                resultado -= 1;
-              });
-            },
-            child: Icon(Icons.remove),
-          ),
-          FloatingActionButton(
-            onPressed: () {
-              setState(() {
-                resultado += 1;
-              });
-            },
-            child: Icon(Icons.add),
-          ),
+          OperationFloatActionButton(Icon(Icons.remove), () {
+            _operation(sub);
+          }),
+          OperationFloatActionButton(Icon(Icons.add), () {
+            _operation(add);
+          }),
+          OperationFloatActionButton(Icon(Icons.star), () {
+            _operation(mul);
+          })
         ],
       ),
+    );
+  }
+}
+
+class OperationFloatActionButton extends StatelessWidget {
+  final Function func;
+  final Widget icon;
+
+  OperationFloatActionButton(this.icon, this.func, {Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      backgroundColor: Colors.red,
+      onPressed: func,
+      child: icon,
     );
   }
 }
